@@ -4,6 +4,10 @@ export const API_END_POINT =
 const cache = {};
 
 const request = async (url) => {
+    if (cache[url]) {
+        return cache[url];
+    }
+
     const res = await fetch(url);
 
     if (res.ok) {

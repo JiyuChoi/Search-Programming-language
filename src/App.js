@@ -4,27 +4,42 @@ import SelectedLanguage from './SelectedLanguages.js';
 import Suggestion from './Suggestion.js';
 
 export default function App({ $target }) {
-    this.state = {
-        fetchedLanguages: [],
-        selectedLanguages: [],
-    };
+    if (localStorage.getItem('appState')) {
+        this.state = JSON.parse(localStorage.getItem('appState'));
+    } else {
+        this.state = {
+            fetchedLanguages: [],
+            selectedLanguages: [],
+        };
+    }
 
     this.setState = (nextState) => {
         this.state = {
             ...this.state,
             ...nextState,
         };
+
+        localStorage.setItem('appState', JSON.stringify(this.state));
+
         suggestion.setState({
             selectedIndex: 0,
             items: this.state.fetchedLanguages,
+            keyword: this.state.keyword,
         });
-        selectedLanguage.setState(this.state.selectedLanguages);
+
+        selectedLanguages.setState(this.state.selectedLanguages);
     };
+
+    const selectedLanguages = new SelectedLanguage({
+        $target,
+        initialState: this.state.selectedLanguages,
+    });
 
     const searchInput = new SearchInput({
         $target,
-        initialState: '',
+        initialState: this.state.keyword,
         onChange: async (keyword) => {
+            localStorage.setItem('keyword', keyword);
             if (keyword.length === 0) {
                 this.setState({
                     fetchedLanguages: [],
@@ -33,6 +48,7 @@ export default function App({ $target }) {
                 const languages = await fetchedLanguages(keyword);
                 this.setState({
                     fetchedLanguages: languages,
+                    keyword,
                 });
             }
         },
@@ -41,33 +57,29 @@ export default function App({ $target }) {
     const suggestion = new Suggestion({
         $target,
         initialState: {
-            cursor: 0,
-            items: [],
+            selectedIndex: 0,
+            items: this.state.fetchedLanguages ?? [],
+            keyword: this.state.keyword,
         },
         onSelect: (language) => {
             alert(language);
-            // 선택한 언어 selectedLanguages에 추가하기
+
             const nextSelectedLanguages = [...this.state.selectedLanguages];
+
             const index = nextSelectedLanguages.findIndex(
-                (selectedLanguages) => selectedLanguages === language
+                (selectedLanguage) => selectedLanguage === language
             );
-            console.log(nextSelectedLanguages, index);
+
             if (index > -1) {
                 nextSelectedLanguages.splice(index, 1);
             }
+
             nextSelectedLanguages.push(language);
-            console.log(nextSelectedLanguages, index);
 
             this.setState({
                 ...this.state,
                 selectedLanguages: nextSelectedLanguages,
             });
-            console.log(this.state);
         },
-    });
-
-    const selectedLanguage = new SelectedLanguage({
-        $target,
-        initialState: [],
     });
 }
