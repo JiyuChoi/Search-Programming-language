@@ -1,15 +1,14 @@
 # Search-Programming-language
-### 2022 Dev-matching FE
 <img width="695" alt="image" src="https://user-images.githubusercontent.com/75539452/168410108-ef4d8fe0-dcf7-4a3a-9415-69be376d622e.png">
 
 Vanilla JS를 이용해 프로그래밍 언어를 검색할 수 있는 서비스 구현</br>
 
-- [Requirements][https://github.com/JiyuChoi/Search-Programming-language/issues/1
+- [Requirements](https://github.com/JiyuChoi/Search-Programming-language/issues/1)
 
 ## API 문서
-- [Base URL](https://github.com/dev-redo/language-explorer/blob/master/src/utils/constants.js)
+- Base URL : https://wr4a6p937i.execute-api.ap-northeast-2.amazonaws.com/dev
 
-- [프로그래밍 언어 조회](https://github.com/dev-redo/language-explorer/blob/master/src/utils/req.js)
+- 프로그래밍 언어 조회
   - /languages
   - Method : GET
   - Query Parameter : keyword
@@ -45,3 +44,5 @@ src
 ├─ App.js
 └─ index.js
 ```
+
+### Programmers 2022 Dev-matching FE
