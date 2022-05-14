@@ -44,5 +44,3 @@ src
 ├─ App.js
 └─ index.js
 ```
-
-### Programmers 2022 Dev-matching FE
