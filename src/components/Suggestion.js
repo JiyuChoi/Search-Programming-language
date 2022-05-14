@@ -6,6 +6,15 @@ export default function Suggestion({ $target, initialState, onSelect }) {
     this.state = {
         selectedIndex: 0,
         items: initialState.items,
+        keyword: initialState.keyword,
+    };
+
+    this.setState = (nextState) => {
+        this.state = {
+            ...this.state,
+            ...nextState, //왜?
+        };
+        this.render();
     };
 
     window.addEventListener('keyup', (e) => {
@@ -54,20 +63,8 @@ export default function Suggestion({ $target, initialState, onSelect }) {
         );
     };
 
-    this.setState = (nextState) => {
-        this.state = {
-            ...this.state,
-            ...nextState, //왜?
-        };
-        this.render();
-    };
-
     this.render = () => {
-        const {
-            items,
-            selectedIndex,
-            keyword = localStorage.getItem('keyword'),
-        } = this.state;
+        const { items, selectedIndex, keyword } = this.state;
         if (items.length > 0) {
             this.$element.style.display = 'block';
             this.$element.innerHTML = `<ul>
@@ -75,10 +72,11 @@ export default function Suggestion({ $target, initialState, onSelect }) {
             .map(
                 (item, index) =>
                     `<li class="
-                        index === selectedIndex
-                            ? 'Suggestion__item--selected'
-                            : ''
-                    }" data-index="${index}">${this.renderMatchedItem(
+                        ${
+                            index === selectedIndex
+                                ? 'Suggestion__item--selected'
+                                : ''
+                        }" data-index="${index}">${this.renderMatchedItem(
                         keyword,
                         item
                     )}</li>`

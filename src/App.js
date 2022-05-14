@@ -56,21 +56,17 @@ export default function App({ $target }) {
         initialState: {
             keyword: this.state.keyword,
             selectedIndex: 0,
-            items: [],
+            items: this.state.fetchedLanguages,
         },
         onSelect: (language) => {
             alert(language);
-
             const nextSelectedLanguages = [...this.state.selectedLanguages];
-
             const index = nextSelectedLanguages.findIndex(
                 (selectedLanguages) => selectedLanguages === language
             );
-
             if (index > -1) {
                 nextSelectedLanguages.splice(index, 1);
             }
-
             nextSelectedLanguages.push(language);
 
             this.setState({
