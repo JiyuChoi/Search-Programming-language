@@ -1,7 +1,7 @@
-import { fetchedLanguages } from './apis/api.js';
-import SearchInput from './SearchInput.js';
-import SelectedLanguage from './SelectedLanguages.js';
-import Suggestion from './Suggestion.js';
+import SearchInput from './components/SearchInput.js';
+import SelectedLanguages from './components/SelectedLanguages.js';
+import Suggestion from './components/Suggestion.js';
+import { fetchedLanguages } from './utils/api.js';
 
 export default function App({ $target }) {
     if (localStorage.getItem('appState')) {
@@ -10,6 +10,7 @@ export default function App({ $target }) {
         this.state = {
             fetchedLanguages: [],
             selectedLanguages: [],
+            keyword: '',
         };
     }
 
@@ -30,15 +31,11 @@ export default function App({ $target }) {
         selectedLanguages.setState(this.state.selectedLanguages);
     };
 
-    const selectedLanguages = new SelectedLanguage({
-        $target,
-        initialState: this.state.selectedLanguages,
-    });
-
     const searchInput = new SearchInput({
         $target,
         initialState: this.state.keyword,
         onChange: async (keyword) => {
+            this.state.keyword = keyword;
             localStorage.setItem('keyword', keyword);
             if (keyword.length === 0) {
                 this.setState({
@@ -48,7 +45,7 @@ export default function App({ $target }) {
                 const languages = await fetchedLanguages(keyword);
                 this.setState({
                     fetchedLanguages: languages,
-                    keyword,
+                    keyword: this.state.keyword,
                 });
             }
         },
@@ -57,9 +54,9 @@ export default function App({ $target }) {
     const suggestion = new Suggestion({
         $target,
         initialState: {
-            selectedIndex: 0,
-            items: this.state.fetchedLanguages ?? [],
             keyword: this.state.keyword,
+            selectedIndex: 0,
+            items: [],
         },
         onSelect: (language) => {
             alert(language);
@@ -67,7 +64,7 @@ export default function App({ $target }) {
             const nextSelectedLanguages = [...this.state.selectedLanguages];
 
             const index = nextSelectedLanguages.findIndex(
-                (selectedLanguage) => selectedLanguage === language
+                (selectedLanguages) => selectedLanguages === language
             );
 
             if (index > -1) {
@@ -81,5 +78,10 @@ export default function App({ $target }) {
                 selectedLanguages: nextSelectedLanguages,
             });
         },
+    });
+
+    const selectedLanguages = new SelectedLanguages({
+        $target,
+        initialState: this.state.selectedLanguages,
     });
 }

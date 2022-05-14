@@ -7,15 +7,14 @@ const request = async (url) => {
     if (cache[url]) {
         return cache[url];
     }
-
     const res = await fetch(url);
 
     if (res.ok) {
         const json = await res.json();
+        cache[url] = json;
         return json;
     }
-
-    throw new Error('요청에 실패함');
+    throw new Error('데이터 요청에 실패했습니다.');
 };
 
 export const fetchedLanguages = async (keyword) =>

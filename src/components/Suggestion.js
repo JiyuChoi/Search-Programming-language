@@ -8,26 +8,6 @@ export default function Suggestion({ $target, initialState, onSelect }) {
         items: initialState.items,
     };
 
-    this.setState = (nextState) => {
-        this.state = {
-            ...this.state,
-            ...nextState,
-        };
-        this.render();
-    };
-
-    this.$element.addEventListener('click', (e) => {
-        const $li = e.target.closest('li');
-        if ($li) {
-            const { index } = $li.dataset;
-            try {
-                onSelect(this.state.items[parseInt(index)]);
-            } catch (error) {
-                alert('무언가 잘못되었습니다! 선택할 수 없습니다.!');
-            }
-        }
-    });
-
     window.addEventListener('keyup', (e) => {
         if (this.state.items.length > 0) {
             const { selectedIndex } = this.state;
@@ -41,13 +21,24 @@ export default function Suggestion({ $target, initialState, onSelect }) {
                 } else if (e.key === 'ArrowDown') {
                     nextIndex = selectedIndex === lastIndex ? 0 : nextIndex + 1;
                 }
-
                 this.setState({
                     ...this.state,
                     selectedIndex: nextIndex,
                 });
             } else if (e.key === 'Enter') {
                 onSelect(this.state.items[this.state.selectedIndex]);
+            }
+        }
+    });
+
+    this.$element.addEventListener('click', (e) => {
+        const $li = e.target.closest('li');
+        if ($li) {
+            const { index } = $li.dataset;
+            try {
+                onSelect(this.state.items[parseInt(index)]);
+            } catch (e) {
+                alert('에러가 발생했습니다. 선택할 수 없습니다.');
             }
         }
     });
@@ -63,31 +54,37 @@ export default function Suggestion({ $target, initialState, onSelect }) {
         );
     };
 
+    this.setState = (nextState) => {
+        this.state = {
+            ...this.state,
+            ...nextState, //왜?
+        };
+        this.render();
+    };
+
     this.render = () => {
         const {
-            items = [],
+            items,
             selectedIndex,
             keyword = localStorage.getItem('keyword'),
         } = this.state;
-        console.log(keyword);
         if (items.length > 0) {
             this.$element.style.display = 'block';
-            this.$element.innerHTML = `
-        <ul>
-          ${items
-              .map(
-                  (item, index) => `
-            <li class="${
-                index === selectedIndex ? 'Suggestion__item--selected' : ''
-            }" data-index="${index}">${this.renderMatchedItem(
-                      keyword,
-                      item
-                  )}</li>
-          `
-              )
-              .join('')}
-        </ul>
-      `;
+            this.$element.innerHTML = `<ul>
+        ${items
+            .map(
+                (item, index) =>
+                    `<li class="
+                        index === selectedIndex
+                            ? 'Suggestion__item--selected'
+                            : ''
+                    }" data-index="${index}">${this.renderMatchedItem(
+                        keyword,
+                        item
+                    )}</li>`
+            )
+            .join('')}
+      </ul>`;
         } else {
             this.$element.style.display = 'none';
             this.$element.innerHTML = '';
