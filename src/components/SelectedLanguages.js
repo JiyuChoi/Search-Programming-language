@@ -4,7 +4,7 @@ export default function SelectedLanguage({ $target, initialState }) {
     this.$element = document.createElement('div');
     this.$element.className = 'SelectedLanguage';
     this.state = initialState;
-    $target.prepend(this.$element);
+    $target.appendChild(this.$element);
 
     this.setState = (nextState) => {
         this.state = nextState;

@@ -21,15 +21,18 @@ export default function App({ $target }) {
         };
 
         localStorage.setItem('appState', JSON.stringify(this.state));
-
         suggestion.setState({
             selectedIndex: 0,
             items: this.state.fetchedLanguages,
             keyword: this.state.keyword,
         });
-
         selectedLanguages.setState(this.state.selectedLanguages);
     };
+
+    const selectedLanguages = new SelectedLanguages({
+        $target,
+        initialState: this.state.selectedLanguages,
+    });
 
     const searchInput = new SearchInput({
         $target,
@@ -74,10 +77,5 @@ export default function App({ $target }) {
                 selectedLanguages: nextSelectedLanguages,
             });
         },
-    });
-
-    const selectedLanguages = new SelectedLanguages({
-        $target,
-        initialState: this.state.selectedLanguages,
     });
 }
