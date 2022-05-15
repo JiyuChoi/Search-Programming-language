@@ -1,5 +1,5 @@
 # Search-Programming-language
-<img width="695" alt="image" src="https://user-images.githubusercontent.com/75539452/168410108-ef4d8fe0-dcf7-4a3a-9415-69be376d622e.png">
+<img width="535" alt="프로그래밍 언어 검색 구현 사진" src="https://user-images.githubusercontent.com/75539452/168452669-bdb6ee14-f886-4c0e-8301-9aa98372557e.png">
 
 Vanilla JS를 이용해 프로그래밍 언어를 검색할 수 있는 서비스 구현</br>
 
